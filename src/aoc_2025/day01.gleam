@@ -1,4 +1,6 @@
+import aoc_2025/util
 import gleam/int
+import gleam/io
 import gleam/list
 import gleam/result
 import gleam/string
@@ -55,4 +57,9 @@ fn parse_direction(x: String) -> Int {
   string.drop_start(x, up_to: 1)
   |> int.parse()
   |> result.unwrap(or: 0)
+}
+
+pub fn main() -> Nil {
+  io.println(util.read_file("inp/day01.txt") |> part1() |> int.to_string())
+  io.println(util.read_file("inp/day01.txt") |> part2() |> int.to_string())
 }

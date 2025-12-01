@@ -1,0 +1,19 @@
+import aoc_2025/util
+import gleam/int
+import gleam/io
+
+pub fn part1(_input: String) -> Int {
+  0
+}
+
+pub fn part2(_input: String) -> Int {
+  0
+}
+
+pub fn main() -> Nil {
+  let input = util.read_file("inp/day{{DAY}}.txt")
+  io.println("Part 1: ")
+  io.println(input |> part1() |> int.to_string())
+  io.println("Part 2: ")
+  io.println(input |> part2() |> int.to_string())
+}
