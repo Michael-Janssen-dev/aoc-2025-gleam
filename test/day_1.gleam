@@ -1,4 +1,4 @@
-import aoc_2025/day01
+import aoc_2025/day_1
 
 const test_case = "L68
 L30
@@ -13,9 +13,9 @@ L82
 "
 
 pub fn part_1_test() {
-  assert day01.part1(test_case) == 3
+  assert day_1.pt_1(test_case) == 3
 }
 
 pub fn part_2_test() {
-  assert day01.part2(test_case) == 6
+  assert day_1.pt_2(test_case) == 6
 }

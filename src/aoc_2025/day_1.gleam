@@ -1,18 +1,16 @@
-import aoc_2025/util
 import gleam/int
-import gleam/io
 import gleam/list
 import gleam/result
 import gleam/string
 
-pub fn part1(input: String) -> Int {
+pub fn pt_1(input: String) -> Int {
   let result =
     parse_input(input)
     |> list.fold(#(50, 0), apply_direction_part1)
   result.1
 }
 
-pub fn part2(input: String) -> Int {
+pub fn pt_2(input: String) -> Int {
   let result =
     parse_input(input)
     |> list.fold(#(50, 0), apply_direction_part2)
@@ -57,9 +55,4 @@ fn parse_direction(x: String) -> Int {
   x
   |> int.parse()
   |> result.unwrap(or: 0)
-}
-
-pub fn main() -> Nil {
-  io.println(util.read_file("inp/day01.txt") |> part1() |> int.to_string())
-  io.println(util.read_file("inp/day01.txt") |> part2() |> int.to_string())
 }

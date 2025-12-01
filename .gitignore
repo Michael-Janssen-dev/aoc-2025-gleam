@@ -3,5 +3,5 @@
 /build
 erl_crash.dump
 
-inp/
+input/
 .env
