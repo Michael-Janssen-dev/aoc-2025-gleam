@@ -45,16 +45,16 @@ fn parse_input(input: String) {
   |> string.split(on: "\n")
   |> list.filter(fn(x) { x != "" })
   |> list.map(fn(x) {
-    case string.first(x) {
-      Ok("L") -> -parse_direction(x)
-      Ok("R") -> parse_direction(x)
+    case x {
+      "L" <> x -> -parse_direction(x)
+      "R" <> x -> parse_direction(x)
       _ -> panic
     }
   })
 }
 
 fn parse_direction(x: String) -> Int {
-  string.drop_start(x, up_to: 1)
+  x
   |> int.parse()
   |> result.unwrap(or: 0)
 }
