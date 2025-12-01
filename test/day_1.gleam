@@ -13,9 +13,11 @@ L82
 "
 
 pub fn part_1_test() {
-  assert day_1.pt_1(test_case) == 3
+  let input = day_1.parse(test_case)
+  assert day_1.pt_1(input) == 3
 }
 
 pub fn part_2_test() {
-  assert day_1.pt_2(test_case) == 6
+  let input = day_1.parse(test_case)
+  assert day_1.pt_2(input) == 6
 }
