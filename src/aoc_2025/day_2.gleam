@@ -25,7 +25,7 @@ pub fn parse(input: String) -> List(#(Int, Int)) {
 
 fn sum_invalid_ids(
   ranges: List(#(Int, Int)),
-  invalid_ids_generator: fn(Int) -> List(Int),
+  invalid_ids_generator: fn(Int, Int, Int) -> List(Int),
 ) -> Int {
   ranges
   |> list.flat_map(fn(range) {
@@ -38,28 +38,33 @@ fn sum_invalid_ids(
 fn get_invalid_ids(
   from: Int,
   to: Int,
-  invalid_ids_generator: fn(Int) -> List(Int),
+  invalid_ids_generator: fn(Int, Int, Int) -> List(Int),
 ) -> List(Int) {
   list.range(int_util.digits(from), int_util.digits(to))
   |> list.filter(keeping: fn(size) { size >= 2 })
-  |> list.flat_map(invalid_ids_generator)
+  |> list.flat_map(invalid_ids_generator(_, from, to))
   |> list.filter(fn(x) { from <= x && x <= to })
 }
 
-fn invalid_id_generator_pt_1(length: Int) -> List(Int) {
+fn invalid_id_generator_pt_1(length: Int, from: Int, to: Int) -> List(Int) {
   case int.is_even(length) {
     False -> []
     True ->
-      int_util.all_numbers(length / 2)
+      list.range(from / int_util.int_power(10, length / 2), {
+        to / int_util.int_power(10, length / 2)
+      })
       |> list.map(int_util.repeat(_, 2))
   }
 }
 
-fn invalid_id_generator_pt_2(length: Int) -> List(Int) {
+fn invalid_id_generator_pt_2(length: Int, from: Int, to: Int) -> List(Int) {
   list.range(1, length / 2)
   |> list.filter(fn(x) { length % x == 0 })
   |> list.flat_map(fn(x) {
-    int_util.all_numbers(x)
+    list.range(
+      from / int_util.int_power(10, length - x),
+      { to / int_util.int_power(10, length - x) } + 1,
+    )
     |> list.map(int_util.repeat(_, length / x))
   })
 }
