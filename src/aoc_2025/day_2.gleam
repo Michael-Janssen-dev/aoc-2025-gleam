@@ -1,6 +1,9 @@
 import gleam/int
+import gleam/io
 import gleam/list
 import gleam/string
+import gleamy/bench
+import simplifile
 import util/int_util
 
 pub fn pt_1(input: List(#(Int, Int))) {
@@ -61,10 +64,25 @@ fn invalid_id_generator_pt_2(length: Int, from: Int, to: Int) -> List(Int) {
   list.range(1, length / 2)
   |> list.filter(fn(x) { length % x == 0 })
   |> list.flat_map(fn(x) {
-    list.range(
-      from / int_util.int_power(10, length - x),
-      { to / int_util.int_power(10, length - x) } + 1,
-    )
+    list.range(from / int_util.int_power(10, length - x), {
+      to / int_util.int_power(10, length - x)
+    })
     |> list.map(int_util.repeat(_, length / x))
   })
+}
+
+pub fn main() {
+  // Benchmarking because the --timed parameter only times once, without warmup
+  let assert Ok(input) = simplifile.read("input/2025/2.txt")
+  let parsed = parse(input)
+  bench.run(
+    [bench.Input("Input", parsed)],
+    [bench.Function("Part 1", pt_1), bench.Function("Part 2", pt_2)],
+    [
+      bench.Duration(10_000),
+      bench.Warmup(1000),
+    ],
+  )
+  |> bench.table([bench.IPS, bench.Min, bench.P(99), bench.Mean])
+  |> io.println()
 }
