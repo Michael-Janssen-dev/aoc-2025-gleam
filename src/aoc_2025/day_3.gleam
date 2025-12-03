@@ -33,16 +33,8 @@ fn max_voltage(bank: List(Int), batteries: Int) -> Int {
 }
 
 pub fn parse(input: String) -> List(List(Int)) {
-  input
-  |> string.trim
-  |> string.split(on: "\n")
-  |> list.map(string.trim)
-  |> list.map(fn(line) {
-    line
-    |> string.to_graphemes()
-    |> list.map(fn(char) {
-      let assert Ok(x) = char |> int.parse
-      x
-    })
-  })
+  use line <- list.map(input |> string.trim |> string.split(on: "\n"))
+  use digit <- list.map(line |> string.trim |> string.to_graphemes())
+  let assert Ok(x) = int.parse(digit)
+  x
 }
