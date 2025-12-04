@@ -4,25 +4,35 @@ import gleam/set
 import gleam/string
 
 pub fn pt_1(input: set.Set(#(Int, Int))) {
-  set.size(fewer_than_4(input))
+  set.size(fewer_than_4(input, input).0)
 }
 
 pub fn pt_2(input: set.Set(#(Int, Int))) {
-  let new_rolls = fewer_than_4(input)
-  case set.size(new_rolls) {
+  pt_2_inner(input, input)
+}
+
+fn pt_2_inner(rolls: set.Set(#(Int, Int)), to_check: set.Set(#(Int, Int))) {
+  let #(removed_rolls, to_check) = fewer_than_4(rolls, to_check)
+  let new_rolls = set.difference(rolls, removed_rolls)
+  // Only check rolls that are still rolls
+  let to_check = set.intersection(to_check, new_rolls)
+  case set.size(removed_rolls) {
     0 -> 0
-    x -> x + pt_2(set.difference(input, new_rolls))
+    x -> x + pt_2_inner(new_rolls, to_check)
   }
 }
 
-fn fewer_than_4(rolls: set.Set(#(Int, Int))) {
-  set.fold(rolls, set.new(), fn(acc, roll) {
+fn fewer_than_4(rolls: set.Set(#(Int, Int)), to_check: set.Set(#(Int, Int))) {
+  set.fold(to_check, #(set.new(), set.new()), fn(acc, roll) {
     let adjacent_rolls =
       adjacent(roll)
-      |> list.count(set.contains(rolls, _))
-    case adjacent_rolls {
+      |> list.filter(set.contains(rolls, _))
+    case list.length(adjacent_rolls) {
       x if x < 4 -> {
-        set.insert(acc, roll)
+        #(
+          set.insert(acc.0, roll),
+          set.union(acc.1, set.from_list(adjacent_rolls)),
+        )
       }
       _ -> acc
     }
