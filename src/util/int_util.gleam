@@ -28,3 +28,8 @@ pub fn ten_to_the_power(x: Int) -> Int {
   let assert Ok(val) = string.pad_end("1", x + 1, with: "0") |> int.parse
   val
 }
+
+pub fn must_parse(x: String) -> Int {
+  let assert Ok(x) = int.parse(x)
+  x
+}
