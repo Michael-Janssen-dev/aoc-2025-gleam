@@ -1,5 +1,6 @@
 import gleam/int
 import gleam/list
+import gleam/order
 import gleam/set
 import gleam/string
 import util/int_util
@@ -7,14 +8,16 @@ import util/int_util
 pub fn pt_1(input: List(Vec3d)) {
   input
   |> list.combination_pairs()
-  |> list.sort(by: fn(a, b) { int.compare(dist(a.0, a.1), dist(b.0, b.1)) })
+  |> list.map(fn(x) { #(x, dist(x.0, x.1)) })
+  |> list.sort(by: fn(a, b) { int.compare(a.1, b.1) })
   |> list.take(1000)
   |> list.fold(list.map(input, set.insert(set.new(), _)), fn(circuits, pair) {
-    merge_circuits(circuits, pair)
+    merge_circuits(circuits, pair.0)
   })
-  |> list.sort(fn(a, b) { int.compare(set.size(b), set.size(a)) })
+  |> list.map(set.size)
+  |> list.sort(order.reverse(int.compare))
   |> list.take(3)
-  |> list.fold(1, fn(acc, x) { acc * set.size(x) })
+  |> list.fold(1, int.multiply)
 }
 
 fn merge_circuits(circuits: List(set.Set(Vec3d)), pair: #(Vec3d, Vec3d)) {
@@ -33,7 +36,8 @@ pub fn pt_2(input: List(Vec3d)) {
   let res =
     input
     |> list.combination_pairs()
-    |> list.sort(by: fn(a, b) { int.compare(dist(a.0, a.1), dist(b.0, b.1)) })
+    |> list.map(fn(x) { #(x, dist(x.0, x.1)) })
+    |> list.sort(by: fn(a, b) { int.compare(a.1, b.1) })
     |> list.fold_until(
       #(
         list.map(input, set.insert(set.new(), _)),
@@ -42,6 +46,7 @@ pub fn pt_2(input: List(Vec3d)) {
       ),
       fn(acc, pair) {
         let #(circuits, _, _) = acc
+        let #(pair, _) = pair
         let new_circuits = merge_circuits(circuits, pair)
         case list.length(new_circuits) {
           1 -> list.Stop(#(new_circuits, pair.0, pair.1))
